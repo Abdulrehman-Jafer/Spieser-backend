@@ -11,7 +11,7 @@ const PostSchema = new Schema({
     userimage: { type: String, required: true },
   },
   likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
-  createdOn: { type: Date, default: Date.now() },
+  createdOn: { type: Date, default: Date.now()},
   comments: [
     {
       username:{type:String,required:true},

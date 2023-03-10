@@ -1,5 +1,6 @@
 import Post from "../models/POST.js";
 import User from "../models/USER.js";
+import { deleteFromStore } from "../utils/delete image/delelteImage.js";
 
 export const createNewPost = async (req, res) => {
   const { userId, caption, image } = req.body;
@@ -100,6 +101,7 @@ export const deleteThePost = async (req, res) => {
     return res.status(401).json({ message: "unauthorized" });
   }
   try {
+    await deleteFromStore(existingPost.image)
     await Post.deleteOne(existingPost);
     existingUser.posts.pull(postId);
     await existingUser.save();
