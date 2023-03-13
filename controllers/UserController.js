@@ -1,8 +1,8 @@
 import Post from "../models/POST.js";
 import User from "../models/USER.js";
-import {hashSync,compareSync} from "bcrypt"
+import bcrypt from "bcryptjs";
 
-export const createNewUser = async (req, res) => {
+export const signUp = async (req, res) => {
   const { username, password, userimage } = req.body;
   if (!username || !password || !userimage) {
     res.status(400).json({ message: "bad Request" });
@@ -16,7 +16,7 @@ export const createNewUser = async (req, res) => {
   if (existingUser) {
     return res.status(400).json({ message: "Username already exist" });
   }
-  let hashedPassword = hashSync(password)
+  const hashedPassword = bcrypt.hashSync(password);
   const user = new User({
     username: username,
     password: hashedPassword,
@@ -25,11 +25,12 @@ export const createNewUser = async (req, res) => {
   try {
     await user.save();
   } catch (err) {
-    return console.log(err);
+    console.log(err);
+    return res.status(500).json({ message: "Something went wrong!" });
   }
   return res.status(201).json({ user: user });
 };
-export const LogIn = async (req, res) => {
+export const logIn = async (req, res) => {
   const { username, password } = req.body;
   let existingUser;
   try {
@@ -41,7 +42,7 @@ export const LogIn = async (req, res) => {
   if (!existingUser) {
     return res.status(404).json({ message: "User does not exist" });
   }
-  let isCorrectPassword = compareSync(password,existingUser.password)
+  let isCorrectPassword = bcrypt.compareSync(password, existingUser.password);
   if (!isCorrectPassword) {
     return res.status(403).json({ message: "Wrong password --Forbidden" });
   }
@@ -68,13 +69,13 @@ export const getUserPosts = async (req, res) => {
   return res.status(200).json({ userPosts });
 };
 
-export const SearchUser = async (req, res) => {
+export const searchUser = async (req, res) => {
   const { searchText } = req.body;
   if (!searchText) {
-    return res.status(400).json({ message:"bad request"});
+    return res.status(400).json({ message: "bad request" });
   }
   try {
-    const result = await User.find({username:searchText});
+    const result = await User.find({ username: searchText });
     return res.status(200).json({ result });
   } catch (error) {
     console.log(error);

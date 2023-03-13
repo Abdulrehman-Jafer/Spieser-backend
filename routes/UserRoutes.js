@@ -1,10 +1,10 @@
 import express from "express"
-import { createNewUser,LogIn,getUserPosts,SearchUser } from "../controllers/UserController.js"
+import { signUp,logIn,getUserPosts,searchUser } from "../controllers/UserController.js"
 const UserRoute = express.Router()
 
 
-UserRoute.post("/create",createNewUser)
-UserRoute.post("/login",LogIn)
+UserRoute.post("/signUP",signUp)
+UserRoute.post("/login",logIn)
 UserRoute.post("/posts",getUserPosts)
-UserRoute.post("/search",SearchUser)
+UserRoute.post("/search",searchUser)
 export default UserRoute
