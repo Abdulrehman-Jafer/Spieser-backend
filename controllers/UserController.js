@@ -79,7 +79,7 @@ export const getUserPosts = async (req, res) => {
 export const searchUser = async (req, res) => {
   const { searchText } = req.body;
   if (!searchText) {
-    return res.status(400).json({ message: "bad request" });
+    return res.status(400).json({ message: "Bad request" });
   }
   try {
     const result = await User.find({ username: searchText });
@@ -89,3 +89,18 @@ export const searchUser = async (req, res) => {
     return res.status(500).json({ message: "Something went wrong" });
   }
 };
+
+export const getUserById = async (req,res) => {
+  const {userId} = req.params
+  if(!userId){
+    return res.status(400).json({message:"Bad request"})
+  }
+  let existingUser;
+  try {
+    existingUser = await User.findById(userId)
+    return res.status(200).json({existingUser})
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({message:"Something went wrong!"})
+  }
+}
