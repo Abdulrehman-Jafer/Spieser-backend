@@ -7,6 +7,10 @@ export const signUp = async (req, res) => {
   if (!username || !password || !userimage) {
     res.status(400).json({ message: "bad Request" });
   }
+  
+  if(username.trim() == "" || password.trim == ""){
+    return res.status(422).json({message:"Invalid name or password"})
+  }
   let existingUser;
   try {
     existingUser = await User.findOne({ username: username });
@@ -32,6 +36,9 @@ export const signUp = async (req, res) => {
 };
 export const logIn = async (req, res) => {
   const { username, password } = req.body;
+  if(username.trim() == "" || password.trim == ""){
+    return res.status(422).json({message:"Invalid name or password"})
+  }
   let existingUser;
   try {
     existingUser = await User.findOne({ username });
