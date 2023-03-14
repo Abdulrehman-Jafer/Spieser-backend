@@ -45,11 +45,11 @@ export const LikePost = async (req, res) => {
   const { postId, userId } = req.body;
   console.log(req.body);
   if (!postId || !userId) {
-    return res.status(400).json({ message: "bad request 1" });
+    return res.status(400).json({ message: "bad request" });
   }
   const post = await Post.findById(postId);
   if (post.likes.includes(userId)) {
-    return res.status(400).json({ message: "bad request 2" });
+    return res.status(400).json({ message: "Already liked the post" });
   }
   const user = await User.findById(userId);
   try {
@@ -69,7 +69,7 @@ export const AddComment = async (req, res) => {
   let existingUser = await User.findById(userId);
   let existingPost = await Post.findById(postId);
   if (!existingUser || !existingPost) {
-    return res.status(401).json({ message: "unauthorized" });
+    return res.status(401).json({ message: "Unauthorized" });
   }
   try {
     let comment = { username, userimage, commentBody, userId };
@@ -98,7 +98,7 @@ export const deleteThePost = async (req, res) => {
     return res.status(400).json({ message: "bad request" });
   }
   if (!existingUser.posts.includes(existingPost._id)) {
-    return res.status(401).json({ message: "unauthorized" });
+    return res.status(401).json({ message: "Unauthorized" });
   }
   try {
     await deleteFromStore(existingPost.image)
@@ -120,15 +120,15 @@ export const saveThePost = async (req, res) => {
     return res.status(400).json({ message: "bad request" });
   }
   if (existingUser.saved.includes(postId)) {
-    return res.status(400).json({ message: "already saved" });
+    return res.status(400).json({ message: "Already saved" });
   }
   try {
     existingUser.saved.push(postId);
     await existingUser.save();
-    res.status(200).json({ message: "successful" });
+    res.status(200).json({ message: "Successful" });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ message: "something went wrong" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
