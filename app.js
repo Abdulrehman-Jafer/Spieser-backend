@@ -9,7 +9,6 @@ const app = express()
 dotenv.config()
 app.use(express.json())
 app.use(cors())
-mongoose.set('strictQuery', true)
 
 app.use("/api/user",UserRoute)
 app.use("/api/post",PostRouter)
