@@ -12,6 +12,10 @@ app.use(cors())
 
 app.use("/api/user",UserRoute)
 app.use("/api/post",PostRouter)
+app.use("/",(req,res,next)=>{
+    res.send("<h1>Spieser Restful Api</h1>")
+    next()
+})
 
 mongoose.connect(process.env.MONGO_URI).then(()=>{
     app.listen(process.env.PORT || 9000,()=>{
